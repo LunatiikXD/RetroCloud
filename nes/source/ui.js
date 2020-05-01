@@ -20,7 +20,6 @@ JSNES.DummyUI = function(nes) {
     this.nes = nes;
     this.enable = function() {};
     this.updateStatus = function() {};
-    this.writeAudio = function() {};
     this.writeFrame = function() {};
 };
 
@@ -55,7 +54,6 @@ var JSNESUI = function(roms) {
         self.buttons = {
             pause:   document.getElementById('btn-pause'),
             restart: document.getElementById('btn-restart'),
-            sound:   document.getElementById('btn-sound'),
             zoom:    document.getElementById('btn-zoom')
         };
         self.status = document.getElementById('nes-status');
@@ -69,14 +67,6 @@ var JSNESUI = function(roms) {
             self.screen.setAttribute('class','not-zoomed');
             self.buttons.zoom.childNodes[0].setAttribute('class','icon-zoom-in');
             self.buttons.zoom.childNodes[1].data = 'Zoom in';
-        }
-
-        if (self.nes.opts.emulateSound) {
-            self.buttons.sound.childNodes[0].setAttribute('class','icon-volume-mute');
-            self.buttons.sound.childNodes[1].data = 'Disable Sound';
-        } else {
-            self.buttons.sound.childNodes[0].setAttribute('class','icon-volume-3');
-            self.buttons.sound.childNodes[1].data = 'Enable Sound';
         }
 
         /*
@@ -142,20 +132,7 @@ var JSNESUI = function(roms) {
             self.nes.start();
         });
 
-        self.buttons.sound.addEventListener('click',function() {
-            if (self.nes.opts.emulateSound) {
-                self.nes.opts.emulateSound = false;
-                if (localStorage) localStorage.setItem('sound', false);
-                self.buttons.sound.childNodes[0].setAttribute('class','icon-volume-3');
-                self.buttons.sound.childNodes[1].data = 'Enable Sound';
-            } else {
-                self.nes.opts.emulateSound = true;
-                if (localStorage) localStorage.setItem('sound', true);
-                self.buttons.sound.childNodes[0].setAttribute('class','icon-volume-mute');
-                self.buttons.sound.childNodes[1].data = 'Disable Sound';
-            }
-        });
-
+       
         self.buttons.zoom.addEventListener('click', function() {
             if (self.zoomed) {
                 self.zoomed = false;
@@ -312,13 +289,7 @@ var JSNESUI = function(roms) {
                 this.buttons.pause.childNodes[1].data = 'Resume';
             }
 
-            if (this.nes.opts.emulateSound) {
-                this.buttons.sound.childNodes[0].setAttribute('class','icon-volume-mute');
-                this.buttons.sound.childNodes[1].data = 'Disable Sound';
-            } else {
-                this.buttons.sound.childNodes[0].setAttribute('class','icon-volume-3');
-                this.buttons.sound.childNodes[1].data = 'Enable Sound';
-            }
+           
         },
 
         updateStatus: function(s) {
@@ -341,13 +312,7 @@ var JSNESUI = function(roms) {
             }
         },
 
-        writeAudio: function(samples) {
-            if (WebAudio && WebAudio.audioContext) {
-                return WebAudio.writeInt(samples);
-            }
-            return this.dynamicaudio.writeInt(samples);
-        },
-
+        
         writeFrame: function(buffer, prevBuffer) {
             var imageData = this.canvasImageData.data;
             var pixel, i, j;
