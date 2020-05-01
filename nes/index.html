@@ -1,0 +1,198 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link href="css/modern.css" rel="stylesheet"/>
+    <link href="css/modern-responsive.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <title>JSNES: A JavaScript NES emulator</title>
+</head>
+
+<body class="modern-ui">
+
+<div class="page">
+    <div class="nav-bar">
+        <div class="nav-bar-inner padding10">
+            <span class="pull-menu"></span>
+            <a href="/"><span class="element brand"> JSNES </span></a>
+        </div>
+    </div>
+</div>
+
+<div class="page page-index">
+    <div class="page-region">
+        <div class="page-region-content">
+            <div class="grid">
+                <div class="row">
+                    <div class="span12 padding10 fg-color-darken">
+
+                        <div id="emulator">
+                            <canvas id="nes-screen" width="256" height="240" class="not-zoomed"></canvas>
+                           
+                            <div id="nes-roms" class="input-control select">
+                                <select id="rom-select">
+                                    <option>Select a ROM...</option>
+                                </select>
+                            </div>
+                            <p>or use a local file below or by using drag & drop onto the nes display</p>
+                            <input id="rom-file" type="file"/>
+
+                            <div id="nes-controls">
+                                <button id="btn-pause" type="button" class="nes-pause bg-color-orange" disabled><i
+                                        class="icon-play"></i>Play
+                                </button>
+                                <button id="btn-restart" type="button" class="nes-restart bg-color-red" disabled><i
+                                        class="icon-loop"></i>Restart
+                                </button>
+                                <button id="btn-sound" type="button" class="nes-enablesound bg-color-green" disabled><i
+                                        class="icon-volume-3"></i>Enable Sound
+                                </button>
+                                <button id="btn-zoom" type="button" class="nes-zoom bg-color-purple"><i class="icon-zoom-in"></i>Zoom in
+                                </button>
+                            </div>
+                            <p id="nes-status"><img src="images/preloader-w8-line-black.gif"></p>
+                        </div>
+                        <details id="nes-help">
+                            <summary>Controls</summary>
+                            <table id="controls">
+                                <tr>
+                                    <th>Button</th>
+                                    <th>Player 1</th>
+                                    <th>Player 2</th>
+                                </tr>
+                                <tr>
+                                    <td>Left</td>
+                                    <td>Left</td>
+                                    <td>Num-4</td>
+                                <tr>
+                                    <td>Right</td>
+                                    <td>Right</td>
+                                    <td>Num-6</td>
+                                </tr>
+                                <tr>
+                                    <td>Up</td>
+                                    <td>Up</td>
+                                    <td>Num-8</td>
+                                </tr>
+                                <tr>
+                                    <td>Down</td>
+                                    <td>Down</td>
+                                    <td>Num-2</td>
+                                </tr>
+                                <tr>
+                                    <td>A</td>
+                                    <td>X</td>
+                                    <td>Num-7</td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td>Z/Y</td>
+                                    <td>Num-9</td>
+                                </tr>
+                                <tr>
+                                    <td>Start</td>
+                                    <td>Enter</td>
+                                    <td>Num-1</td>
+                                </tr>
+                                <tr>
+                                    <td>Select</td>
+                                    <td>Ctrl</td>
+                                    <td>Num-3</td>
+                                </tr>
+                            </table>
+                        </details>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="page">
+    <div class="nav-bar">
+        <span class="element">
+            2013, jsnes mod © by <a class="fg-color-white" href="minimi.site44.com">minimi</a>. Original code by <a
+                class="fg-color-white" href="https://github.com/bfirsh/jsnes">bfirsh</a>.
+        </span>
+    </div>
+</div>
+
+<script src="lib/dynamicaudio-min.js" type="text/javascript"></script>
+<script src="source/nes.js" type="text/javascript"></script>
+<script src="source/utils.js" type="text/javascript"></script>
+<script src="source/cpu.js" type="text/javascript"></script>
+<script src="source/keyboard.js" type="text/javascript"></script>
+<script src="source/gamepad.js" type="text/javascript"></script>
+<script src="source/mappers.js" type="text/javascript"></script>
+<script src="source/papu.js" type="text/javascript"></script>
+<script src="source/ppu.js" type="text/javascript"></script>
+<script src="source/rom.js" type="text/javascript"></script>
+<script src="source/webaudio.js" type="text/javascript"></script>
+<script src="source/ui.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    if(!JSNES.Utils.isIE()) console.time('Load JSNES');
+
+    var nes = new JSNES({
+        'ui':new JSNESUI({
+            "Working":[
+                ['Addams Family, The', 'roms/Addams Family, The (U).nes'],
+                ['Battletoads', 'roms/Battletoads (U).nes'],
+                ['Bubble Bobble', 'roms/Bubble Bobble.nes'],
+//                ['Castlevania 3 - Dracula\'s Curse', 'roms/Castlevania 3 - Dracula\'s Curse (U).nes'],
+                ['Capitan America', 'roms/cap_am.nes'],
+                ['Chip \'n Dale Rescue Rangers (RUS)', 'roms/Chip_\'n_Dale_Rescue_Rangers_(R).nes'],
+                //['Chip \'n Dale Rescue Rangers 2', 'roms/Chip_\'n_Dale_Rescue_Rangers_2_(R).nes'],
+                ['Circus Charlie', 'roms/Circus Charlie.nes'],
+                ['Contra', 'roms/Contra.nes'],
+                ['Crystal Mines', 'roms/Crystal Mines.nes'],
+                ['Darkseed', 'roms/Darkseed (Unl).nes'],
+                ['Darkwing Duck', 'roms/Darkwing Duck (U).nes'],
+                ['Dragon Power', 'roms/Dragon Power (U).nes'],
+                ['Dragon Quest', 'roms/Dragon Quest (J).nes'],
+                ['Dragon Warrior', 'roms/Dragon Warrior.nes'],
+                ['Duck Tales', 'roms/Duck Tales (E).nes'],
+                ['Excitebike', 'roms/Excitebike.nes'],
+                ['Felix the Cat', 'roms/Felix the Cat (U).nes'],
+                ['Golf', 'roms/Golf (E) [!].nes'],
+                //['Impossible Mission II', 'roms/Impossible Mission II.nes'],
+                ['Legend of Zelda', 'roms/Legend of Zelda.nes'],
+                ['Marble Madness', 'roms/Marble Madness (U).nes'],
+                ['Mashou', 'roms/Mashou.nes'],
+                ['Metal Fighter', 'roms/Metal Fighter.nes'],
+                ['RC Pro-Am', 'roms/RC Pro-Am.nes'],
+                ['RC Pro-Am 2', 'roms/RC Pro-Am 2.nes'],
+                ['Solomon\'s Key', 'roms/Solomon\'s Key (U) [!].nes'],
+                ['Super Contra', 'roms/Super Contra.nes'],
+                ['Super Mario Bros', 'roms/SuperMarioBros.nes'],
+                ['Super Mario Bros. 2', 'roms/Super Mario Bros 2.nes'],
+                ['Super Mario Bros. 3', 'roms/Super Mario Bros 3.nes'],
+                ['Time Lord', 'roms/Time Lord.nes'],
+                ['Zelda II - Adventure of Link', 'roms/Zelda II - Adventure of Link.nes'],
+                ['Zen Intergalactic Ninja', 'roms/Zen Intergalactic Ninja.nes']
+            ]
+        })
+    });
+    if(!JSNES.Utils.isIE()) console.timeEnd('Load JSNES');
+</script>
+<!--[if IE]>
+<script type="text/vbscript" src="source/jsnes-ie-hacks.vbscript"></script>
+<![endif]-->
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39087079-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+</body>
+</html>
